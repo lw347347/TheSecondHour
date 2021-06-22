@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+#mainContainer {
+  display: grid;
+  grid-template-columns: minmax(20px, 1fr) minmax(350px, 800px) minmax(20px, 1fr);
+}
+
+#topBar {
+  height: 50px;
+}
