@@ -4,12 +4,14 @@ import { Card } from "react-bootstrap";
 export default function DisplayCard(props: any) {
     const [numberOfPreviousSundaysInThisMonth, setNumberOfPreviousSundaysInThisMonth] = useState<Number | undefined>();
     const [monthName, setMonthName] = useState<String | undefined>();
+    const [reasonWhy, setReasonWhy] = useState<String | undefined>();
     const [today, setToday] = useState<Date>();
+    const [todayIs, setTodayIs] = useState<String | undefined>();
+    const [todayIsCombined, setTodayIsCombined] = useState<Boolean | undefined>();
+    const [todayIsGeneralConference, setTodayIsGeneralConference] = useState<Boolean>(false);
     const [todayIsSunday, setTodayIsSunday] = useState<Boolean>();
     const [todayIsSundaySchool, setTodayIsSundaySchool] = useState<Boolean | undefined>();
-    const [todayIsCombined, setTodayIsCombined] = useState<Boolean | undefined>();
     const [todayIsTheBlankSunday, setTodayIsTheBlankSunday] = useState<String | undefined>();
-    const [todayIs, setTodayIs] = useState<String | undefined>();
     const [todayOrThisComingSunday, setTodayOrThisComingSunday] = useState<String>();
     const [todayString, setTodayString] = useState<String>();
 
@@ -25,29 +27,43 @@ export default function DisplayCard(props: any) {
             let setEverythingUp = (day: Date) => {
                 // Check which Sunday it is
                 setNumberOfPreviousSundaysInThisMonth(Math.floor(day.getDate() / 7));
-            
-                if (numberOfPreviousSundaysInThisMonth === 1 
-                    || numberOfPreviousSundaysInThisMonth === 3) {
+                
+                // Check if it will be general conference
+                if (numberOfPreviousSundaysInThisMonth === 0 && (day.getMonth() === 4 || day.getMonth() === 10)) {
                     // Today is not Sunday School
                     setTodayIsSundaySchool(false);
                     setTodayIsCombined(false);
-        
+                    setTodayIsGeneralConference(true);
+
                     // Set the right sunday
-                    setTodayIsTheBlankSunday(numberOfPreviousSundaysInThisMonth === 1 ? "second" : "fourth");
-                } else if (numberOfPreviousSundaysInThisMonth === 0 
-                    || numberOfPreviousSundaysInThisMonth === 2) {
-                    // Today is Sunday school
-                    setTodayIsSundaySchool(true);
-                    setTodayIsCombined(false);
-        
-                    // Set the right sunday
-                    setTodayIsTheBlankSunday(numberOfPreviousSundaysInThisMonth === 0 ? "first" : "third");
+                    setTodayIsTheBlankSunday('first');
                 } else {
-                    // There must have been 4 previous sundays
-                    setTodayIsCombined(true);
-                    setTodayIsSundaySchool(false);
-                    setTodayIsTheBlankSunday("fifth");
+                    if (numberOfPreviousSundaysInThisMonth === 1 
+                        || numberOfPreviousSundaysInThisMonth === 3) {
+                        setTodayIsGeneralConference(true);
+                        setTodayIsSundaySchool(false);
+                        setTodayIsCombined(false);
+            
+                        // Set the right sunday
+                        setTodayIsTheBlankSunday('first');
+
+                    } else if (numberOfPreviousSundaysInThisMonth === 0 
+                        || numberOfPreviousSundaysInThisMonth === 2) {
+                        // Today is Sunday school
+                        setTodayIsSundaySchool(true);
+                        setTodayIsCombined(false);
+            
+                        // Set the right sunday
+                        setTodayIsTheBlankSunday(numberOfPreviousSundaysInThisMonth === 0 ? "first" : "third");
+                    } else {
+                        // There must have been 4 previous sundays
+                        setTodayIsCombined(true);
+                        setTodayIsSundaySchool(false);
+                        setTodayIsTheBlankSunday("fifth");
+                    }
                 }
+
+                setReasonWhy(`Because ${todayIsSunday ? 'it is' : 'it will be'} the ${todayIsTheBlankSunday} sunday in the month of ${monthName}.`);
             }
 
             if (today.getDay() === 0) {
@@ -111,7 +127,7 @@ export default function DisplayCard(props: any) {
                     
                     
                     <Card.Text>
-                        <div>Because {todayIsSunday ? 'it is' : 'it will be'} the {todayIsTheBlankSunday} sunday in the month of {monthName}.</div>
+                        <div>{reasonWhy}</div>
                         <div className="text-muted">Please see more <a href="https://www.churchofjesuschrist.org/bc/content/ldsorg/general-conference/16435_000_FAQ.pdf?lang=eng">here.</a></div>
                     </Card.Text>
                 </Card.Body>
