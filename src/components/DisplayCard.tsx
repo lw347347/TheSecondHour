@@ -50,8 +50,6 @@ export default function DisplayCard(props: any) {
                 }
             }
 
-            console.log(today.getDay());
-
             if (today.getDay() === 0) {
                 // It is Sunday
                 setTodayIsSunday(true);
@@ -98,15 +96,20 @@ export default function DisplayCard(props: any) {
             <Card>
                 <Card.Body>
                     <div className="d-inline-block card-title">
-                        <div>
-                            {todayOrThisComingSunday}
+                        <div className="d-flex">
+                            <div className="d-inline-block card-subtitle margin-top" id="date">
+                                {todayOrThisComingSunday}
+                            </div>
+                            <div className="d-inline-block card-subtitle text-muted text-end margin-top" id="date"
+                                style={{marginLeft: "auto"}}
+                            >
+                                {todayString}
+                            </div>
                         </div>
                         <div style={{fontSize: '2.5rem'}} id="todayIs">{todayIs}.</div>
                     </div>
                     
-                    <h5 className="d-inline-block card-subtitle text-muted float-right margin-top" id="date">
-                        
-                    </h5>
+                    
                     <Card.Text>
                         <div>Because {todayIsSunday ? 'it is' : 'it will be'} the {todayIsTheBlankSunday} sunday in the month of {monthName}.</div>
                         <div className="text-muted">Please see more <a href="https://www.churchofjesuschrist.org/bc/content/ldsorg/general-conference/16435_000_FAQ.pdf?lang=eng">here.</a></div>
